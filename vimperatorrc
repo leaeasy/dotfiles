@@ -1,0 +1,25 @@
+"3.4 (created: 2012/04/02 20:07:29)
+
+source! ~/.vimperatorrc.local
+
+
+" vim: set ft=vimperator:
+noremap j 8j
+noremap k 8k
+noremap h H
+noremap l L
+noremap H gT
+noremap L gt
+noremap J <C-d>
+noremap K <C-u>
+
+
+set nextpattern=\s*下一页|下一张|下页\s*,\bnext\b,\bNext\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\bmore\b
+set previouspattern=\s*上一页|上一张|上页\s*,\bprev|previous\b,\bPrev\b,^<$,^(<<|«)$,^(<|«),(<|«)$
+set titlestring="Mozilla Firefox"
+set hintchars=abcdefghijklmnopqrstuvwxyz
+noremap , [[
+noremap . ]]
+
+set complete=sl
+set editor=qvim\ -f
