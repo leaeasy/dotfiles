@@ -1,19 +1,19 @@
 .PHONY: all tmux fbterm zsh vimperator lscolor
 
-all: install-base update-quiet
+all: tmux fbterm zsh vimperator lscolor256
 
 tmux:
-	ln -fs tmux.conf ~/.tmux.conf
+	ln -fs $(shell pwd)/tmux.conf ~/.tmux.conf
 
 fbterm:
-	ln -fs fbtermrc ~/.fbtermrc
+	ln -fs $(shell pwd)/fbtermrc ~/.fbtermrc
 
 zsh:
-	ln -fs zshrc ~/.zshrc
+	ln -fs $(shell pwd)/zshrc ~/.zshrc
 
 vimperator:
-	ln -fs vimperatorrc ~/.vimperatorrc
-	ln -fs vimperator ~/.vimperator
+	ln -fs $(shell pwd)/vimperatorrc ~/.vimperatorrc
+	ln -fs $(shell pwd)/vimperator ~/.vimperator
 
 lscolor:
-	ln -fs lscolor256 ~/.lscolor256
+	ln -fs $(shell pwd)/lscolor256 ~/.lscolor256
