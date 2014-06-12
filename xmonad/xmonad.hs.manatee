@@ -1,0 +1,221 @@
+-- XMonad
+import XMonad
+-- Actions
+import XMonad.Actions.CycleWS
+import XMonad.Actions.CycleSelectedLayouts
+import XMonad.Actions.CopyWindow
+import XMonad.Actions.DwmPromote
+import XMonad.Actions.DynamicWorkspaces
+import XMonad.Actions.FindEmptyWorkspace
+import XMonad.Actions.MouseGestures
+import XMonad.Actions.MouseResize
+import XMonad.Actions.RotSlaves
+import XMonad.Actions.Search
+import XMonad.Actions.SimpleDate
+import XMonad.Actions.WindowGo
+-- Hooks
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageDocks
+-- Layout
+import XMonad.Layout
+import XMonad.Layout.Accordion
+import XMonad.Layout.Circle
+import XMonad.Layout.Combo
+import XMonad.Layout.Decoration
+import XMonad.Layout.DecorationMadness
+import XMonad.Layout.DragPane
+import XMonad.Layout.Grid
+import XMonad.Layout.DwmStyle
+import XMonad.Layout.IM
+import XMonad.Layout.LayoutHints
+import XMonad.Layout.Magnifier
+import XMonad.Layout.Maximize
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.Named
+import XMonad.Layout.NoBorders
+import XMonad.Layout.PerWorkspace
+import XMonad.Layout.SimpleFloat
+import XMonad.Layout.Simplest
+import XMonad.Layout.Reflect
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.TwoPane
+import XMonad.Layout.WindowNavigation
+-- Operations
+import XMonad.Operations
+-- Prompt
+import XMonad.Prompt
+import XMonad.Prompt.Man
+import XMonad.Prompt.RunOrRaise
+import XMonad.Prompt.Shell
+import XMonad.Prompt.Window
+import XMonad.Prompt.Workspace
+import XMonad.Prompt.XMonad
+-- Util
+import XMonad.Util.EZConfig
+import XMonad.Util.Run
+import XMonad.Util.WorkspaceCompare
+import XMonad.Util.Dmenu
+import XMonad.Util.Font
+
+-- 别名
+import qualified XMonad.StackSet as W
+import qualified XMonad.Actions.Search as S
+
+-- 鼠标行为
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = False     -- 不跟着鼠标聚焦
+
+-- 变量设置
+myTerminal              = "terminator"                                         -- 终端
+myBorderWidth           = 1                                                    -- 边框宽度
+myWorkspaces            = ["emacs", "virtualbox", "others"] ++ map show [4..9] -- 工作区
+myNormalBorderColor     = "#444488"                                            -- 正常边框的颜色
+myFocusedBorderColor    = "#440000"                                            -- 聚焦边框的颜色
+myFont                  = "xft:DejaVu Sans YuanTi:pixelsize=16"                -- 字体设置
+myXpBgColor             = "#000100"                                            -- 背景颜色
+myXpFgColor             = "#005500"                                            -- 前景颜色
+myXpBgHLight            = "#001000"                                            -- 高亮背景色
+myXpFgHLight            = "#00aa00"                                            -- 高亮前景色
+myXpBorderColor         = "#002200"                                            -- 边框颜色
+myXpPosition            = Bottom                                               -- 位置
+myTbInactiveBorderColor = "#444488"                                            -- 标签未激活边框颜色
+myTbActiveBorderColor   = "#440000"                                            -- 标签激活边框颜色
+myTbInactiveColor       = "#000000"                                            -- 标签未激活背景颜色
+myTbActiveColor         = "#000000"                                            -- 标签激活背景颜色
+myTbInactiveTextColor   = "#444444"                                            -- 标签未激活文本颜色
+myTbActiveTextColor     = "#004400"                                            -- 标签激活文本颜色
+
+
+-- 提示
+myXPConfig :: XPConfig
+myXPConfig = defaultXPConfig
+              { font        = myFont
+              , bgColor     = myXpBgColor
+              , fgColor     = myXpFgColor
+              , bgHLight    = myXpBgHLight
+              , fgHLight    = myXpFgHLight
+              , borderColor = myXpBorderColor
+              , position    = myXpPosition
+              }
+
+-- 自定义按键
+myKeys = \conf -> mkKeymap conf $
+            [ 
+            {- | 窗口 -}
+              ("C-q ;", kill)                                            -- 关闭当前窗口
+            , ("C-q n", windows W.focusDown)                             -- 聚焦到下一个窗口
+            , ("C-q p", windows W.focusUp)                               -- 聚焦到上一个窗口
+            , ("C-q S-n", windows W.swapDown)                            -- 和下一个窗口交换
+            , ("C-q S-p", windows W.swapUp)                              -- 和上一个窗口交换
+            , ("C-q x", windows W.focusMaster)                           -- 聚焦到主要窗口
+            , ("C-q S-x", windows W.swapMaster)                          -- 交换主要窗口
+            , ("C-q b", windowPromptBring myXPConfig)                    -- 把窗口带到当前工作区
+            , ("C-q g", windowPromptGoto myXPConfig)                     -- 跳到某个窗口
+            , ("C-q t", withFocused $ windows . W.sink)                  -- 聚焦到当前的窗口
+            , ("C-q z", sendMessage (IncMasterN 1))                      -- 增加主要窗口数量
+            , ("C-q S-z", sendMessage (IncMasterN (-1)))                 -- 减少主要窗口数量
+            , ("C-q h", sendMessage $ Go L)                              -- 聚焦到左面的窗口
+            , ("C-q l", sendMessage $ Go R)                              -- 聚焦到右面的窗口
+            , ("C-q j", sendMessage $ Go D)                              -- 聚焦到下面的窗口
+            , ("C-q k", sendMessage $ Go U)                              -- 聚焦到上面的窗口
+            , ("C-q S-h", sendMessage $ Swap L)                          -- 和左面的窗口交换
+            , ("C-q S-l", sendMessage $ Swap R)                          -- 和右面的窗口交换
+            , ("C-q S-j", sendMessage $ Swap D)                          -- 和下面的窗口交换
+            , ("C-q S-k", sendMessage $ Swap U)                          -- 和上面的窗口交换
+            , ("C-q M-h", sendMessage $ Move L)                          -- 把窗口移动到左边的子布局
+            , ("C-q M-l", sendMessage $ Move R)                          -- 把窗口移动到右边的子布局
+            , ("C-q M-j", sendMessage $ Move D)                          -- 把窗口移动到下边的子布局
+            , ("C-q M-k", sendMessage $ Move U)                          -- 把窗口移动到上边的子布局
+            , ("C-q C-M-h", sendMessage Shrink)                          -- 向左缩小窗口
+            , ("C-q C-M-l", sendMessage Expand)                          -- 向右扩大窗口
+            , ("C-q C-M-j", sendMessage MirrorShrink)                    -- 向下缩小窗口
+            , ("C-q C-M-k", sendMessage MirrorExpand)                    -- 向上扩大窗口
+            {- | 运行特定的程序 -}
+            , ("C-q w", runOrRaise "firefox" (className =? "Iceweasel"))     -- 运行或切换到firefox
+            , ("C-q C-w", spawn "firefox")                                   -- 启动firefox
+            , ("C-q c", runOrRaise "terminator" (className =? "Terminator")) -- 运行或切换到Terminatorc
+            , ("C-q C-c", spawn "terminator")                                -- 启动终端
+            , ("C-q e", runOrRaise "emacs" (className =? "Emacs"))           -- 运行或切换到Emacs
+            , ("C-q C-e", spawn "emacs")                                     -- 启动Emacs
+            {- | 工作区 -}
+            , ("C-q ,", nextWS)                       -- 切换到下一个工作区
+            , ("C-q .", prevWS)                       -- 切换到上一个工作区
+            , ("C-q S-,", shiftToNext)                -- 把当前窗口移动到下一个工作区
+            , ("C-q S-.", shiftToPrev)                -- 把当前窗口移动到上一个工作区
+            , ("C-q M-,", shiftToNext >> nextWS)      -- 把当前窗口移动并切换到下一个工作区
+            , ("C-q M-.", shiftToPrev >> prevWS)      -- 把当前窗口移动并切换到上一个工作区
+            , ("C-q C-M-,", moveTo Next NonEmptyWS)   -- 移动到下一个非空的工作区
+            , ("C-q C-M-.", moveTo Prev NonEmptyWS)   -- 移动到上一个非空的工作区
+            , ("C-q m", addWorkspace "new ws")        -- 添加一个新的工作区
+            , ("C-q S-m", renameWorkspace myXPConfig) -- 重命名工作区
+            , ("C-q /", removeWorkspace)              -- 移除工作区
+            , ("C-q S-/", viewEmptyWorkspace)         -- 查找空的工作区
+            , ("C-q M-/", selectWorkspace myXPConfig) -- 跳到某个工作区
+            , ("M-<Tab>", toggleWS)                   -- 切换工作区
+            , ("C-q i", windows copyToAll)            -- 拷贝当前窗口到所有工作区
+            , ("C-q S-i", killAllOtherCopies)         -- 关闭其他工作区的拷贝
+            {- | 布局 -}
+            , ("C-S-<Space>", sendMessage NextLayout)                        -- 下一个布局
+            , ("M-S-<Space>", setLayout $ XMonad.layoutHook conf)          -- 恢复默认的布局设置
+            {- | 其他的 -}
+            , ("C-q '", shellPrompt myXPConfig)                            -- Shell 命令
+            , ("C-q S-'", xmonadPrompt myXPConfig)                         -- XMonad 命令
+            , ("C-q r", restart "xmonad" True)                             -- 重新加载 XMonad
+            , ("C-q <Space>", runOrRaise "emacs" (className =? "Emacs") >> -- 编辑XMonad的配置文件
+                            spawn "emacsclient -e '(find-file \"~/.xmonad/xmonad.hs\")'")
+            ]
+            ++
+            -- 浏览/移动/拷贝到工作区
+            [ (m ++ i, windows $ f j)
+              | (i, j) <- zip (map show [1..9]) (XMonad.workspaces conf)
+              , (m, f) <- [ ("C-q ", W.view)    -- 浏览工作区
+                          , ("C-q S-", W.shift) -- 移动到工作区
+                          , ("C-q M-", copy)]   -- 拷贝到工作区
+            ]
+            ++
+            -- EMMS 按键
+            [ ("C-q u " ++ k, f) 
+                  | (k, f) <- [ ("a", spawn "emacsclient -e '(emms-pause)'")             -- 暂停
+                              , ("x", spawn "emacsclient -e '(emms-random)'")            -- 随机播放
+                              , ("j", spawn "emacsclient -e '(emms-volume-mode-minus)'") -- 降低音量
+                              , ("k", spawn "emacsclient -e '(emms-volume-mode-plus)'")  -- 升高音量
+                              , ("h", spawn "emacsclient -e '(emms-seek-backward)'")     -- 后退
+                              , ("l", spawn "emacsclient -e '(emms-seek-forward)'")]]    -- 前进
+
+-- 标签主题
+myTabbedTheme = defaultTheme 
+                { inactiveBorderColor = myTbInactiveBorderColor
+                , activeBorderColor = myTbActiveBorderColor
+                , inactiveColor = myTbInactiveColor
+                , activeColor = myTbActiveColor
+                , inactiveTextColor = myTbInactiveTextColor
+                , activeTextColor = myTbActiveTextColor
+                , fontName = myFont
+                }
+
+-- 布局
+myLayout = tiled
+           ||| wmii
+           ||| Full
+               where
+                 tiled = named "Default" (ResizableTall 1 (1/100) (1/2) [])
+                 wmii = windowNavigation (named "Wmii" (combineTwo (dragPane Vertical 0.1 0.5) (Accordion) (Accordion)))
+
+-- 记录
+myLogHook :: X ()
+myLogHook = ewmhDesktopsLogHook -- for support "_NET_ACTIVE_WINDOW" root window property
+
+-- 设置
+main = xmonad $ defaultConfig  
+       { terminal               = myTerminal
+       , normalBorderColor      = myNormalBorderColor
+       , focusedBorderColor     = myFocusedBorderColor
+       , borderWidth            = myBorderWidth
+       , workspaces             = myWorkspaces
+       , keys                   = myKeys
+       , focusFollowsMouse      = myFocusFollowsMouse
+       , layoutHook             = myLayout 
+       , logHook                = myLogHook
+       }

@@ -1,0 +1,16 @@
+Config { font = "xft:XHei Ubuntu.Mono"
+    , bgColor = "black"
+    , fgColor = "grey"
+    , position = TopW L 100
+    , lowerOnStart = True
+    , commands = [ Run MultiCpu ["-p", "3", "-L","3","-H","80","--high","red","-t","<total0> <total1>"] 10
+        , Run BatteryP ["BAT1"] ["-t", "<left>%", "-H", "50", "-n", "yellow", "-L", "20", "-l","red"] 10
+        , Run Memory ["-t", "<free>M"] 10
+        , Run Date "%a %b %_d %l:%M %p" "date" 10
+        , Run Com "/tmp/caps_status.sh" [] "status" 1
+        , Run StdinReader
+        ]
+    , sepChar = "%"
+    , alignSep = "}{"
+    , template = "%StdinReader% }{ %multicpu% | %status%  %memory% | <fc=#ee0000>%battery% </fc><fc=#ee9a00>%date%</fc>"
+}

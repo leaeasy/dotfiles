@@ -500,10 +500,6 @@ export XIM_PROGRAM="fcitx"
 export XMODIFIERS="@im=fcitx"
 export GTK_IM_MODULE="fcitx"
 export QT_IM_MODULE="fcitx"
-
-# redefine command not found
-(bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70}
-
 # }}}
 
 # 读入其他配置 {{{ 

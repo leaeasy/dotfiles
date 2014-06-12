@@ -1,6 +1,7 @@
 "3.4 (created: 2012/04/02 20:07:29)
 
 source! ~/.vimperatorrc.local
+colorscheme schimperator
 
 
 " vim: set ft=vimperator:
@@ -23,3 +24,5 @@ noremap . ]]
 
 set complete=sl
 set editor=qvim\ -f
+set gui=none
+set gui=tabs
