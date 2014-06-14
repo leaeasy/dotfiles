@@ -129,14 +129,17 @@ myKeys = [ ("M-b"        , sendMessage ToggleStruts              ) -- toggle the
          , ("M-S-<Left>" , shiftToPrev                           ) -- move client to prev workspace
          , ("M-r"        , spawn "dmenu_run -fn 'Sans-11'"       ) -- app launcher
          , ("M-n"        , spawn "wicd-client -n"                ) -- network manager
-         , ("C-M-r"        , spawn "xmonad --restart"              ) -- restart xmonad w/o recompiling
+         , ("C-M-r"        , spawn "killall dzen2 && killall gumon && xmonad --restart"              ) -- restart xmonad w/o recompiling
          , ("C-q t"        , spawn "urxvtc"                       ) -- launch terminal
          , ("M-w"        , spawn "firefox"                       ) -- launch browser
          , ("M-e"        , spawn "nautilus"                      ) -- launch file manager
          , ("C-M1-l"     , spawn "slimlock"                      ) -- lock screen
          , ("C-q k"      , kill                                  ) -- kill buffer
-         , ("C-M1-<Delete>" , spawn "shutdown"       ) -- reboot
-         , ("C-M1-<Insert>" , spawn "reboot"       ) -- poweroff
+         , ("<XF86AudioLowerVolume>", spawn "amixer -q set Master 1%-") --XF86AudioLowerVolume
+         , ("<XF86AudioRaiseVolume>", spawn "amixer -q set Master 1%+") --XF86AudioRaiseVolume
+         , ("<XF86AudioMute>", spawn "amixer -q set Master playback toggle") --XF86AudioMute
+         , ("C-M1-<Delete>" , spawn "shutdown now"       ) -- poweroff
+         , ("C-M1-<Insert>" , spawn "reboot"       ) -- reboot
          ]
 
 -- vim:sw=4 sts=4 ts=4 tw=0 et ai 
