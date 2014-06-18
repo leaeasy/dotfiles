@@ -131,12 +131,13 @@ myKeys = [ ("M-b"        , sendMessage ToggleStruts              ) -- toggle the
          , ("M-n"        , spawn "wicd-client -n"                ) -- network manager
          , ("C-M-r"        , spawn "killall dzen2 && killall gumon && xmonad --restart"              ) -- restart xmonad w/o recompiling
          , ("C-q t"        , spawn "urxvtc"                       ) -- launch terminal
-         , ("M-w"        , spawn "firefox"                       ) -- launch browser
-         , ("M-e"        , spawn "nautilus"                      ) -- launch file manager
+         , ("C-q s"        , spawn "sakura"                       ) -- launch terminal
+         , ("C-q e"        , spawn "firefox"                       ) -- launch browser
+         , ("M-e"        , spawn "gvim"                      ) -- launch gvim
          , ("C-M1-l"     , spawn "slimlock"                      ) -- lock screen
          , ("C-q k"      , kill                                  ) -- kill buffer
-         , ("<XF86AudioLowerVolume>", spawn "amixer -q set Master 1%-") --XF86AudioLowerVolume
-         , ("<XF86AudioRaiseVolume>", spawn "amixer -q set Master 1%+") --XF86AudioRaiseVolume
+         , ("<XF86AudioLowerVolume>", spawn "amixer -q set Master 5%-") --XF86AudioLowerVolume
+         , ("<XF86AudioRaiseVolume>", spawn "amixer -q set Master 5%+") --XF86AudioRaiseVolume
          , ("<XF86AudioMute>", spawn "amixer -q set Master playback toggle") --XF86AudioMute
          , ("C-M1-<Delete>" , spawn "shutdown now"       ) -- poweroff
          , ("C-M1-<Insert>" , spawn "reboot"       ) -- reboot
