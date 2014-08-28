@@ -30,6 +30,7 @@ function is-at-least {
 }
 
 SHELL=`which zsh`
+[[ "$TERM" == xterm ]] && export TERM=xterm-256color
 
 #}}}
 
@@ -509,6 +510,7 @@ export QT_IM_MODULE="fcitx"
 #   置于PATH最前以便下面的配置所调用的命令是linux的版本
 [[ -f $HOME/.zshrc.$HOST ]] && source $HOME/.zshrc.$HOST
 [[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+[[ -f $HOME/.xmodmap ]] && xmodmap $HOME/.xmodmap
 # }}}
 
 # 命令别名 {{{
@@ -517,7 +519,7 @@ export QT_IM_MODULE="fcitx"
 (bin-exist tmux) && alias s=tmux || alias s=screen
 
 #no correct for mkdir mv and cp
-for i in  mv cp;       alias $i="nocorrect $i -g"
+#for i in  mv cp;       alias $i="nocorrect $i -g"
 alias mkdir='nocorrect mkdir'
 
 alias find='noglob find'        # noglob for find
