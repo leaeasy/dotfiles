@@ -24,5 +24,4 @@ noremap . ]]
 
 set complete=sl
 set editor=qvim\ -f
-set gui=none
-set gui=tabs
+set gui=tabs,noaddons,nobookmarks,nomenu,nonavigation

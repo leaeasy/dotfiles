@@ -517,6 +517,7 @@ export QT_IM_MODULE="fcitx"
 
 # tmux or screen ?
 (bin-exist tmux) && alias s=tmux || alias s=screen
+(bin-exist ranger) && alias r=ranger 
 
 #no correct for mkdir mv and cp
 #for i in  mv cp;       alias $i="nocorrect $i -g"
